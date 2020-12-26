@@ -1,0 +1,34 @@
+{
+  "name": "moviecatalogue",
+  "version": "1.0.0",
+  "description": "A simple movie catalogue",
+  "main": "./index.js",
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "pg": "^8.4.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.14"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "cross-env npm run env nodemon",
+    "env": "DATABASE_URL=here TMDB_API=here LIFF_ID=here",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfahmialkautsar/MovieCatalogue-LIFF.git"
+  },
+  "keywords": [
+    "Movie",
+    "Catalogue"
+  ],
+  "author": "Fahmi Al",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfahmialkautsar/MovieCatalogue-LIFF/issues"
+  },
+  "homepage": "https://github.com/mfahmialkautsar/MovieCatalogue-LIFF#readme"
+}
