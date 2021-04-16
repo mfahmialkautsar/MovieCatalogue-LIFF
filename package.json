@@ -1,10 +1,9 @@
 {
   "name": "moviecatalogue",
   "version": "1.0.0",
-  "description": "A simple movie catalogue",
-  "main": "./index.js",
+  "description": "A LIFF Movie Catalogue",
+  "main": "index.js",
   "dependencies": {
-    "node-fetch": "^2.6.1",
     "pg": "^8.4.1"
   },
   "devDependencies": {
