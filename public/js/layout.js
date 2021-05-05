@@ -1,4 +1,4 @@
-import {generateListGenreUrl} from './at.js';
+import {generateListGenreUrl} from './api.js';
 import {filmCategory, sleep} from './util.js';
 
 const header = document.getElementById('header');

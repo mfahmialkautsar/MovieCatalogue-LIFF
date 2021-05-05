@@ -105,10 +105,10 @@ function add(req, res) {
       const newWL = await db.addWL(lineUId, name, movie);
       switch (newWL.command) {
         case 'INSERT':
-          send(res, 200);
+          send(res, 201);
           break;
         case 'DELETE':
-          send(res, 201);
+          send(res, 200);
           break;
         default:
           send(res, 400);

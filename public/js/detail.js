@@ -331,10 +331,10 @@ async function watchlist(film) {
 
       const likeIcon = document.getElementById('ic-watchlist');
       if (response) gettingWL = false;
-      if (response.status == 200) {
+      if (response.status == 201) {
         likeIcon.classList.remove(unwatchlistedIcon);
         likeIcon.classList.add(watchlistedIcon);
-      } else if (response.status == 201) {
+      } else if (response.status == 200) {
         likeIcon.classList.remove(watchlistedIcon);
         likeIcon.classList.add(unwatchlistedIcon);
       }

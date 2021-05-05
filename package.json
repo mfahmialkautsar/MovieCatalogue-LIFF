@@ -11,7 +11,7 @@
     "nodemon": "^2.0.14"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "dev": "cross-env npm run env nodemon",
     "env": "DATABASE_URL=here TMDB_API=here LIFF_ID=here",
     "test": "echo \"Error: no test specified\" && exit 1"
