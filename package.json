@@ -7,13 +7,11 @@
     "pg": "^8.4.1"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.19"
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "cross-env npm run env nodemon",
-    "env": "DATABASE_URL=here TMDB_API=here LIFF_ID=here",
+    "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
