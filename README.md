@@ -21,7 +21,7 @@ Just a try and error app. Using only a clean Node.js and a prisma package only.
 
 ### Sample
 
-https://liff.line.me/1653723806-zZml2obV (or you can access https://liffmovie.herokuapp.com)
+https://liff.line.me/1653723806-zZml2obV (or you can access https://liff-movie.vercel.app)
 
 ### Configuration
 
