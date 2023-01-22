@@ -4,7 +4,7 @@
   "description": "A LIFF Movie Catalogue",
   "main": "src/index.js",
   "dependencies": {
-    "pg": "^8.4.1"
+    "@prisma/client": "^4.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"

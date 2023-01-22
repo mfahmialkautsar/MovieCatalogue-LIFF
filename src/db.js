@@ -1,102 +1,120 @@
-const { Pool } = require('pg');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-async function getAll(lineuid) {
+async function getAll(lineUid) {
   try {
-    let get = await pool.query('SELECT * FROM watchlists WHERE lineuid = $1', [
-      lineuid,
-    ]);
-    return get.rows;
+    return await prisma.watchlist.findMany({
+      where: {
+        ownerId: lineUid,
+      },
+    });
   } catch (error) {}
 }
 
-async function getMovies(lineuid) {
+async function getMovies(lineUid) {
   try {
-    let get = await pool.query(
-      "SELECT * FROM watchlists WHERE lineuid = $1 AND category = 'movie'",
-      [lineuid]
-    );
-    return get.rows;
-  } catch (error) {}
+    return await prisma.watchlist.findMany({
+      where: {
+        AND: [{ ownerId: lineUid }, { category: 'movie' }],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function getTvs(lineuid) {
+async function getTvs(lineUid) {
   try {
-    let get = await pool.query(
-      "SELECT * FROM watchlists WHERE lineuid = $1 AND category = 'tv'",
-      [lineuid]
-    );
-    return get.rows;
-  } catch (error) {}
+    return await prisma.watchlist.findMany({
+      where: {
+        AND: [{ ownerId: lineUid }, { category: 'tv' }],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function get(lineuid, id) {
+async function get(lineUid, id) {
   try {
-    let get = await pool.query(
-      'SELECT * FROM watchlists WHERE lineuid = $1 AND filmid = $2::int',
-      [lineuid, id]
-    );
-    return get.rows[0];
-  } catch (error) {}
+    return await prisma.watchlist.findFirst({
+      where: {
+        AND: [{ ownerId: lineUid }, { filmId: id }],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function addUser(lineuid, linename) {
+async function addUser(lineUid, lineName) {
   try {
-    await pool.query(
-      `INSERT INTO users (lineuid, linename)
-			SELECT * FROM (SELECT $1, $2) AS tmp
-			WHERE NOT EXISTS (
-				SELECT lineuid from users WHERE lineuid = $3
-			) LIMIT 1`,
-      [lineuid, linename, lineuid]
-    );
-  } catch (error) {}
+    await prisma.user.upsert({
+      where: {
+        lineUid: lineUid,
+      },
+      update: {
+        lineUid: lineUid,
+        lineName: lineName,
+      },
+      create: {
+        lineUid: lineUid,
+        lineName: lineName,
+      },
+      select: {
+        lineUid: true,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function addWL(lineuid, linename, movie) {
+async function addWL(lineUid, movie) {
   try {
-    addUser(lineuid, linename);
     let title = movie.title || movie.name;
     title = title.replace("'", "''");
-    const insert = await pool.query(
-      `INSERT INTO watchlists (wlid, lineuid, linename, filmid, filmTitle, category)
-			SELECT * FROM (SELECT $1, $2, $3, $4::int, $5, $6) AS tmp
-			WHERE NOT EXISTS (
-				SELECT lineuid, filmid FROM watchlists WHERE lineuid = $7 AND filmid = $8::int
-			) LIMIT 1`,
-      [
-        lineuid + movie.id,
-        lineuid,
-        linename,
-        movie.id,
-        title,
-        movie.title ? 'movie' : 'tv',
-        lineuid,
-        movie.id,
-      ]
-    );
-    if (insert.rowCount == 0) {
-      return await delWL(lineuid, movie.id);
-    }
-    return insert;
+    const wlId = lineUid + movie.id;
+    return await prisma.watchlist.upsert({
+      where: {
+        wlId: wlId,
+      },
+      update: {
+        wlId: wlId,
+        ownerId: lineUid,
+        filmId: movie.id,
+        title: title,
+        category: movie.title ? 'movie' : 'tv',
+      },
+      create: {
+        wlId: wlId,
+        ownerId: lineUid,
+        filmId: movie.id,
+        title: title,
+        category: movie.title ? 'movie' : 'tv',
+      },
+      select: {
+        wlId: true,
+      },
+    });
   } catch (error) {
-    if (error.code == 23505) {
-      return await delWL(lineuid, movie.id);
+    console.log(error);
+    if (error.code === 'P2002') {
+      return await delWL(lineUid, movie.id);
     }
   }
 }
 
-async function delWL(lineuid, filmid) {
+async function delWL(lineUid, filmId) {
   try {
-    const wl = await pool.query(
-      'DELETE FROM watchlists WHERE lineuid = $1 AND filmid = $2::int',
-      [lineuid, filmid]
-    );
-    return wl;
-  } catch (error) {}
+    return await prisma.watchlist.deleteMany({
+      where: {
+        AND: [{ ownerId: lineUid }, { filmId: filmId }],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-module.exports = { getAll, get, addWL, delWL };
+module.exports = { addUser, getAll, get, addWL, delWL };

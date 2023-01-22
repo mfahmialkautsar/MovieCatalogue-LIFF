@@ -9,28 +9,28 @@ function send(res, code) {
 }
 
 function getDetailMovie(category, id) {
-	return new Promise((resolve, reject) => {
-		https
-			.get(generateDetailMovieUrl(category, id), (res) => {
-				let data = '';
+  return new Promise((resolve, reject) => {
+    https
+      .get(generateDetailMovieUrl(category, id), (res) => {
+        let data = '';
 
-				res.on('data', (chunk) => {
-					data += chunk;
-				});
-				res.on('end', () => {
-					resolve(data);
-				});
-			})
-			.on('error', reject);
-	});
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          resolve(data);
+        });
+      })
+      .on('error', reject);
+  });
 }
 
 function generateMovieUrl(content) {
-	return `${MOVIE_DB_ENDPOINT}/3/${content}?api_key=${MOVIE_DB_API}`;
+  return `${MOVIE_DB_ENDPOINT}/3/${content}?api_key=${MOVIE_DB_API}`;
 }
 
 function generateDetailMovieUrl(category, id) {
-	return generateMovieUrl(`${category}/${id}`);
+  return generateMovieUrl(`${category}/${id}`);
 }
 
 function getById(req, res) {
@@ -39,9 +39,9 @@ function getById(req, res) {
   req.on('end', async () => {
     try {
       body = JSON.parse(body);
-      const lineuid = body.lineUId;
-      const filmid = body.filmId;
-      const movie = await db.get(lineuid, filmid);
+      const lineUid = body.lineUId;
+      const filmId = body.filmId;
+      const movie = await db.get(lineUid, filmId);
       if (movie) {
         res.writeHead(200);
       } else {
@@ -60,13 +60,13 @@ function getAll(req, res) {
   req.on('end', async () => {
     try {
       body = JSON.parse(body);
-      const lineuid = body.lineUId;
-      const movies = await db.getAll(lineuid);
+      const lineUid = body.lineUId;
+      const movies = await db.getAll(lineUid);
       if (movies) {
         resMovies = [];
         if (movies.length > 0) {
           movies.forEach((movie) => {
-            getDetailMovie(movie.category, movie.filmid)
+            getDetailMovie(movie.category, movie.filmId)
               .then((movie) => {
                 resMovies.push(movie);
 
@@ -102,17 +102,14 @@ function add(req, res) {
       const lineUId = body.lineUId;
       const name = body.name;
       const movie = body.movie;
-      const newWL = await db.addWL(lineUId, name, movie);
-      switch (newWL.command) {
-        case 'INSERT':
-          send(res, 201);
-          break;
-        case 'DELETE':
-          send(res, 200);
-          break;
-        default:
-          send(res, 400);
-          break;
+      await db.addUser(lineUId, name);
+      const wl = await db.get(lineUId, movie.id);
+      if (wl) {
+        await db.delWL(lineUId, movie.id);
+        send(res, 200);
+      } else {
+        await db.addWL(lineUId, movie);
+        send(res, 201);
       }
     } catch (error) {
       send(res, 400);

@@ -1,9 +1,9 @@
 # MovieCatalogue-LIFF
 
 Basically the same as my android [The Movie Catalogue](https://github.com/mfahmialkautsar/TheMovieCatalogue), but you can run this on any browser you have on your phone and computer.
-And if you login with your [LINE Messenger](https://line.me) account, you can get Watchlist feature. This can be happened with the help of LIFF ([LINE Front-end Framework](https://developers.line.biz/console)).
+And if you login with your [LINE Messenger](https://line.me) account, you can get Watchlist feature. This can be happened with the help of LIFF ([LINE Front-end Framework](https://developers.line.biz/en/docs/liff/overview/)).
 
-Just a try and error app. No framework. Clean Node.js and a pg package only.
+Just a try and error app. Using only a clean Node.js and a prisma package only.
 
 ## Screenshot
 
@@ -26,21 +26,20 @@ https://liff.line.me/1653723806-zZml2obV (or you can access https://liffmovie.he
 ### Configuration
 
 - Run `npm i`
-- Endpoint URL at LIFF [LINE Developers Console](https://developers.line.biz/console): Your domain
-- Database schema: Coming soon
+- Endpoint URL at LIFF [LINE Developers Console](https://developers.line.biz/en/docs/liff/overview/): Your domain
 
 ### Environment
 
-- `DATABASE_URL`: PostgreSQL database url
+- `DATABASE_URL`: Database url
 - `MOVIE_DB_API`: Your TMDB API key
 - `LIFF_ID`: From [LINE Developers Console](https://developers.line.biz/console)
 
 ### Built With
 
 - [TMDB](https://developers.themoviedb.org/3)
-- [LINE Front-end Framework SDK](https://developers.line.biz/en/docs/liff/)
+- [LINE Front-end Framework SDK](https://developers.line.biz/en/docs/liff/overview/)
 - [Node.js](https://nodejs.org/en/docs/)
-- [PostgreSQL](https://www.postgresql.org/docs/)
+- [Prisma](https://www.prisma.io/docs)
 - [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/introduction)
 - [Font Awesome](https://github.com/FortAwesome/Font-Awesome)
 

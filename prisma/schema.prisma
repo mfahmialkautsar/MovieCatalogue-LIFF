@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        BigInt         @id @default(autoincrement())
+  lineUid   String      @unique
+  lineName  String?
+  watchlist Watchlist[]
+}
+
+model Watchlist {
+  id       BigInt    @id @default(autoincrement())
+  wlId     String @unique
+  filmId   Int
+  title    String
+  category String
+  owner    User   @relation(fields: [ownerId], references: [lineUid])
+  ownerId  String
+}
