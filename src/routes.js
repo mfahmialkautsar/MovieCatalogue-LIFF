@@ -3,23 +3,24 @@ const file = require('./controllers/file');
 const {getById, getAll, add} = require('./controllers/watchlist');
 
 async function routes(req, res) {
+  let url = new URL(`${req.protocol}://${req.headers.host}${req.url}`);
   switch (req.method) {
     case 'GET':
-      switch (req.url) {
+      switch (url.pathname) {
         case '/send-id':
           getLineId(req, res);
           break;
-        case String(req.url.match(/\/tmdb\/.+/)):
+        case String(url.pathname.match(/\/tmdb\/.+/)):
           getTmdb(req, res);
           break;
         default:
-          file(req, res);
+          file(req, res, url);
           break;
       }
 
       break;
     case 'POST':
-      switch (req.url) {
+      switch (url.pathname) {
         case '/addWL':
           add(req, res);
           break;

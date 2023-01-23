@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-function file(req, res) {
-  let filePath = req.url.replace(/^\/+/, '').replace(/\/+$/, '');
+function file(req, res, url) {
+  let filePath = url.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
 
   const reqArray = filePath.split('/');
   const lastPath = reqArray[reqArray.length - 1];
@@ -41,7 +41,7 @@ function file(req, res) {
     default:
       if (filePath.match(/\.html$/i)) {
         filePath = '404';
-      } else if (req.url.match(/\/?code=.+/)) {
+      } else if (url.searchParams.get('code')) {
         filePath = 'index.html';
       }
       break;
